@@ -11,6 +11,9 @@ import reactLogo from "./assets/react.svg";
 import "./App.scss";
 
 function App() {
+    const [fleet, setFleet] = useState([]);
+    const [selectedShip, setSelectedShip] = useState({});
+
     return (
         <main>
             <Routes>
