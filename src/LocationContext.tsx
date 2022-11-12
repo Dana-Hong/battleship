@@ -1,9 +1,9 @@
 import { createContext } from "react";
-import { Fleet } from "./types";
+import { Fleet, PlaceShip } from "./types";
 import { ShipInterface } from "./interfaces";
 
 const defaultContext: {
-    placeShip: (selectedShip: ShipInterface, fleet: Fleet) => void;
+    placeShip: PlaceShip;
     selectedShip: ShipInterface | null | undefined;
 } = {
     placeShip: (selectedShip: ShipInterface, fleet: Fleet) => {},
