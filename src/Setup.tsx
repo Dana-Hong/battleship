@@ -7,7 +7,7 @@ import ShipSelectButton from "./ShipSelectButton";
 import { getShipLocation, getFleetLocation } from "./utils";
 
 import { shipTemplates } from "./shipTemplates";
-import { Fleet, ShipNames } from "./types";
+import { Fleet, PlaceShip, ShipNames } from "./types";
 import { ShipInterface, ShipTemplates } from "./interfaces";
 
 import LocationContext from "./LocationContext";
@@ -26,21 +26,24 @@ const Setup = (props: {
     function highlightCoordinates(id: string, shipLength: number, axis: "X" | "Y" | undefined) {
         const hoveredCoordinates = getShipLocation(id, shipLength, axis);
         setHighlightedCoordinates(hoveredCoordinates);
-        // console.log("hovered:", hoveredCoordinates);
     }
-    // console.log(selectedShip);
-    // console.log(highlightedCoordinates);
 
     function switchAxis() {
         setCurrentAxis((prevAxis) => (prevAxis === "X" ? "Y" : "X"));
     }
 
-    function placeShip(selectedShip: ShipInterface, fleet: Fleet) {
+    function placeShip(selectedShip: ShipInterface, fleet: Fleet, id: string) {
         if (selectedShip === null) {
             return;
         }
-
+        const shipLocation = getShipLocation(id, selectedShip.health, currentAxis);
         const fleetLocation = getFleetLocation(fleet);
+        const placementConflict = fleetLocation.some((coordinate) => {
+            return shipLocation.includes(coordinate);
+        });
+        if (placementConflict) {
+            return;
+        }
 
         setFleet((prevFleet: ShipInterface[]): ShipInterface[] => {
             const updatedFleet: ShipInterface[] = [
