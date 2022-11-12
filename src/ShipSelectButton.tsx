@@ -5,7 +5,6 @@ const ShipSelectButton = (props: any) => {
     return (
         <button
             onClick={(e) => {
-                // console.log((e.target as HTMLElement).textContent);
                 selectShip((e.target as HTMLElement).textContent as ShipNames);
             }}
         >
