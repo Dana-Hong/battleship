@@ -1,0 +1,13 @@
+target(id) {
+    loop over fleet
+        if ship.coordinates.some(id) === true
+            ship.health = ship.health - 1
+            call isHit // takes care of UI
+            event.target.disabled = true;
+        else 
+            call isMiss // takes care of UI
+}
+
+isHit(id) {
+    coordinateArray.map(coordinate => coordinate.id)
+}

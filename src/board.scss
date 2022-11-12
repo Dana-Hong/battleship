@@ -1,7 +1,9 @@
 .board-container {
+    margin: 0 auto;
+    max-width: 386px;
     display: grid;
     border: solid green 2px;
-    grid-template-columns: 36px 1fr;
+    grid-template-columns: 36px 1fr 36px;
     grid-template-rows: 36px 1fr;
 }
 
@@ -27,5 +29,6 @@
 .board {
     grid-column-start: 2;
     grid-row-start: 2;
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
 }

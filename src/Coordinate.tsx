@@ -1,18 +1,49 @@
 import { useContext } from "react";
-import LocationContext from "./locationContext";
+import LocationContext from "./LocationContext";
+import { ShipInterface } from "./interfaces";
+import { highlightCoordinates, CoordinateType } from "./types";
 
 import "./coordinate.scss";
+import { shipTemplates } from "./shipTemplates";
+import Setup from "./Setup";
 
 export default function Coordinate(props: {
+    setup: boolean;
     location: string;
     targeted: null | boolean;
     occupied: null | boolean;
+    hovered?: null | string;
+    highlightCoordinates?: highlightCoordinates;
+    selectedShip?: ShipInterface;
+    axis?: "X" | "Y" | undefined;
+    target?: (id: string) => void;
+    fleet: ShipInterface[];
 }) {
-    const { location, targeted, occupied } = props;
-    const locationContext = useContext(LocationContext);
+    const {
+        setup,
+        location,
+        targeted,
+        occupied,
+        hovered,
+        highlightCoordinates,
+        selectedShip,
+        axis,
+        target,
+        fleet,
+    } = props;
+    const { placeShip } = useContext(LocationContext);
+
+    const fleetPosition = fleet
+        .map((ship) => {
+            return ship.location;
+        })
+        .flat();
+
+    const shipHere = fleetPosition.includes(location);
+
     return (
         <div
-            className={`coordinate ${props.occupied}`}
+            className={`coordinate ${shipHere ? "occupied" : ""} ${hovered ? hovered : ""}`}
             id={location}
             // onClick={(event) =>
             //     locationContext.placeShip(
@@ -20,12 +51,22 @@ export default function Coordinate(props: {
             //         event.target.id
             //     )
             // }
-            onClick={(event) =>
-                console.log((event.target as HTMLDivElement).id)
-            }
-            onMouseOver={(event) =>
-                console.log((event.target as HTMLDivElement).id)
-            }
+            onClick={(event) => {
+                if (setup) {
+                    placeShip(selectedShip as ShipInterface, fleet);
+                } else {
+                    target!((event.target as HTMLDivElement).id);
+                }
+            }}
+            onMouseOver={(event) => {
+                if (setup && selectedShip !== null) {
+                    highlightCoordinates!(
+                        (event.target as HTMLDivElement).id,
+                        selectedShip!.health,
+                        axis
+                    );
+                }
+            }}
         ></div>
     );
 }

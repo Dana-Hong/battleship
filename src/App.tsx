@@ -1,51 +1,35 @@
-import { useState } from "react";
-import { Link, Route, Routes } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Route, Routes } from "react-router-dom";
 
 import Home from "./Home";
 import Setup from "./Setup";
-import Game from "./Play";
+import PlayGame from "./PlayGame";
 import HowToPlay from "./HowToPlay";
 import History from "./History";
 
-import reactLogo from "./assets/react.svg";
+import { generateCoordinates } from "./generateCoordinates";
+
+import { CoordinateType, Fleet } from "./types";
+import { ShipInterface } from "./interfaces";
+
 import "./App.scss";
 
 function App() {
-    const [fleet, setFleet] = useState([]);
-    const [selectedShip, setSelectedShip] = useState({});
+    const [fleet, setFleet] = useState<Fleet>([]);
+    const [coordinates, setCoordinates] = useState<CoordinateType[]>(generateCoordinates());
+
+    console.log(fleet);
 
     return (
         <main>
             <Routes>
                 <Route path="/" element={<Home />} />
-                <Route path="/setup" element={<Setup />} />
-                <Route path="/play" element={<Game />} />
+                <Route path="/setup" element={<Setup fleet={fleet} setFleet={setFleet} />} />
+                <Route path="/playgame" element={<PlayGame fleet={fleet} setFleet={setFleet} />} />
                 <Route path="/how-to-play" element={<HowToPlay />} />
                 <Route path="/history" element={<History />} />
             </Routes>
         </main>
     );
 }
-// <div className="App">
-//   <div>
-//     <a href="https://vitejs.dev" target="_blank">
-//       <img src="/vite.svg" className="logo" alt="Vite logo" />
-//     </a>
-//     <a href="https://reactjs.org" target="_blank">
-//       <img src={reactLogo} className="logo react" alt="React logo" />
-//     </a>
-//   </div>
-//   <h1>Vite + React</h1>
-//   <div className="card">
-//     <button onClick={() => setCount((count) => count + 1)}>
-//       count is {count}
-//     </button>
-//     <p>
-//       Edit <code>src/App.tsx</code> and save to test HMR
-//     </p>
-//   </div>
-//   <p className="read-the-docs">
-//     Click on the Vite and React logos to learn more
-//   </p>
-// </div>
 export default App;
