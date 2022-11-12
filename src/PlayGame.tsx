@@ -15,6 +15,7 @@ export default function PlayGame(props: {
                 if (ship.location.includes(id)) {
                     return {
                         ...ship,
+                        destroyedLocations: [...ship.destroyedLocations, id],
                         health: ship.health - 1,
                     };
                 } else {
@@ -22,6 +23,7 @@ export default function PlayGame(props: {
                 }
             });
         });
+        console.log(fleet);
     }
 
     console.log("fleet:", fleet);

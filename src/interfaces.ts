@@ -5,8 +5,8 @@ export interface ShipInterface {
     health: number;
     isPlaced: boolean;
     active: boolean;
-    location: null | string[];
-    destroyedSections: null | string[];
+    location: string[];
+    destroyedLocations: string[];
 }
 
 export interface ShipTemplates {

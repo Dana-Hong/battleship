@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import Board from "./Board";
 import ShipSelectButton from "./ShipSelectButton";
 
-import { latitudeCoordinates, longitudeCoordinates } from "./generateCoordinates";
+import { getShipLocation, getFleetLocation } from "./utils";
 
 import { shipTemplates } from "./shipTemplates";
 import { Fleet, ShipNames } from "./types";
@@ -24,54 +24,37 @@ const Setup = (props: {
     const [highlightedCoordinates, setHighlightedCoordinates] = useState<string[]>([]);
 
     function highlightCoordinates(id: string, shipLength: number, axis: "X" | "Y" | undefined) {
-        const longitudeCoordinate = Number(id.slice(1));
-        const latitudeCoordinate = id[0];
-        const longCoordinatesCopy = [...longitudeCoordinates];
-        const latCoordinatesCopy = [...latitudeCoordinates];
-        let hoveredCoordinates: string[] = [];
-
-        if (axis === "X") {
-            const sliceStartIndex = longCoordinatesCopy.indexOf(String(longitudeCoordinate));
-            const hoveredlatCoordinates = longCoordinatesCopy.splice(sliceStartIndex, shipLength);
-            hoveredCoordinates = hoveredlatCoordinates.map(
-                (coordinate) => `${latitudeCoordinate}${coordinate}`
-            );
-        } else if (axis === "Y") {
-            const sliceStartIndex = latitudeCoordinates.indexOf(latitudeCoordinate);
-            const hoveredLongCoordinates = latCoordinatesCopy.splice(sliceStartIndex, shipLength);
-            hoveredCoordinates = hoveredLongCoordinates.map(
-                (coordinate) => `${coordinate}${longitudeCoordinate}`
-            );
-        }
+        const hoveredCoordinates = getShipLocation(id, shipLength, axis);
         setHighlightedCoordinates(hoveredCoordinates);
+        // console.log("hovered:", hoveredCoordinates);
     }
+    // console.log(selectedShip);
+    // console.log(highlightedCoordinates);
 
     function switchAxis() {
         setCurrentAxis((prevAxis) => (prevAxis === "X" ? "Y" : "X"));
     }
 
     function placeShip(selectedShip: ShipInterface, fleet: Fleet) {
-        const fleetLocation = fleet
-            .map((ship) => {
-                return ship.location;
-            })
-            .flat();
-
-        console.log(fleetLocation);
-
-        if (selectedShip.name !== undefined) {
-            const placedShip = {
-                ...selectedShip,
-                isPlaced: true,
-                location: highlightedCoordinates,
-            };
-            setFleet((prevFleet: ShipInterface[]): ShipInterface[] => {
-                const updatedFleet: ShipInterface[] = [...prevFleet, placedShip];
-                return updatedFleet;
-            });
-
-            setSelectedShip(null);
+        if (selectedShip === null) {
+            return;
         }
+
+        const fleetLocation = getFleetLocation(fleet);
+
+        setFleet((prevFleet: ShipInterface[]): ShipInterface[] => {
+            const updatedFleet: ShipInterface[] = [
+                ...prevFleet,
+                {
+                    ...selectedShip,
+                    isPlaced: true,
+                    location: highlightedCoordinates,
+                },
+            ];
+            return updatedFleet;
+        });
+
+        setSelectedShip(null);
     }
 
     function selectShip(shipName: ShipNames) {

@@ -45,12 +45,6 @@ export default function Coordinate(props: {
         <div
             className={`coordinate ${shipHere ? "occupied" : ""} ${hovered ? hovered : ""}`}
             id={location}
-            // onClick={(event) =>
-            //     locationContext.placeShip(
-            //         locationContext.selectedShip,
-            //         event.target.id
-            //     )
-            // }
             onClick={(event) => {
                 if (setup) {
                     placeShip(selectedShip as ShipInterface, fleet);

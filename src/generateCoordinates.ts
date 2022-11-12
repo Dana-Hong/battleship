@@ -4,10 +4,10 @@ const longitudeCoordinates = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
 const latitudeCoordinates = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
 
 const generateCoordinates = (): CoordinateType[] => {
-    const coordinatesArray = latitudeCoordinates.map((latitudeCoordinates) => {
-        return longitudeCoordinates.map((longitudeCoordinates) => {
+    const coordinatesArray = longitudeCoordinates.map((longCoordinate) => {
+        return latitudeCoordinates.map((latCoordinate) => {
             return {
-                location: `${latitudeCoordinates}${longitudeCoordinates}`,
+                location: `${latCoordinate}${longCoordinate}`,
                 targeted: null,
                 occupied: null,
                 hovered: null,
