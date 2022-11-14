@@ -5,7 +5,9 @@ import { ShipInterface } from "./interfaces";
 
 export default function PlayGame(props: {
     fleet: Fleet;
+    opponentFleet: ShipInterface[];
     setFleet: React.Dispatch<React.SetStateAction<Fleet>>;
+    setOpponentFleet: React.Dispatch<React.SetStateAction<Fleet>>;
 }) {
     const { fleet, setFleet } = props;
 

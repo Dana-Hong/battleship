@@ -16,16 +16,38 @@ import "./App.scss";
 
 function App() {
     const [fleet, setFleet] = useState<Fleet>([]);
+    const [opponentFleet, setOpponentFleet] = useState<Fleet>([]);
     const [coordinates, setCoordinates] = useState<CoordinateType[]>(generateCoordinates());
 
     console.log(fleet);
+    console.log(opponentFleet);
 
     return (
         <main>
             <Routes>
                 <Route path="/" element={<Home />} />
-                <Route path="/setup" element={<Setup fleet={fleet} setFleet={setFleet} />} />
-                <Route path="/playgame" element={<PlayGame fleet={fleet} setFleet={setFleet} />} />
+                <Route
+                    path="/setup"
+                    element={
+                        <Setup
+                            fleet={fleet}
+                            setFleet={setFleet}
+                            opponentFleet={opponentFleet}
+                            setOpponentFleet={setOpponentFleet}
+                        />
+                    }
+                />
+                <Route
+                    path="/playgame"
+                    element={
+                        <PlayGame
+                            fleet={fleet}
+                            setFleet={setFleet}
+                            opponentFleet={opponentFleet}
+                            setOpponentFleet={setOpponentFleet}
+                        />
+                    }
+                />
                 <Route path="/how-to-play" element={<HowToPlay />} />
                 <Route path="/history" element={<History />} />
             </Routes>

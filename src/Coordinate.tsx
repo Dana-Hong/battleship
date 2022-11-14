@@ -1,11 +1,9 @@
 import { useContext } from "react";
 import LocationContext from "./LocationContext";
 import { ShipInterface } from "./interfaces";
-import { highlightCoordinates, CoordinateType } from "./types";
+import { highlightCoordinates, CoordinateType, Fleet } from "./types";
 
 import "./coordinate.scss";
-import { shipTemplates } from "./shipTemplates";
-import Setup from "./Setup";
 
 export default function Coordinate(props: {
     setup: boolean;
@@ -31,7 +29,7 @@ export default function Coordinate(props: {
         target,
         fleet,
     } = props;
-    const { placeShip } = useContext(LocationContext);
+    const { placeShip, placeOpponentShip, opponentFleet } = useContext(LocationContext);
 
     const fleetPosition = fleet
         .map((ship) => {
@@ -47,7 +45,8 @@ export default function Coordinate(props: {
             id={location}
             onClick={(event) => {
                 if (setup) {
-                    placeShip(selectedShip as ShipInterface, fleet);
+                    placeShip(selectedShip as ShipInterface, fleet, location, axis);
+                    placeOpponentShip(selectedShip as ShipInterface, opponentFleet as Fleet);
                 } else {
                     target!((event.target as HTMLDivElement).id);
                 }

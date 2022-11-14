@@ -1,13 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import Board from "./Board";
 import ShipSelectButton from "./ShipSelectButton";
 
-import { getShipLocation, getFleetLocation } from "./utils";
+import {
+    getShipLocation,
+    getRandomAxis,
+    getRandomCoordinates,
+    checkIsValidPlacement,
+} from "./utils";
 
 import { shipTemplates } from "./shipTemplates";
-import { Fleet, PlaceShip, ShipNames } from "./types";
+import { Axis, Fleet, PlaceShip, ShipNames } from "./types";
 import { ShipInterface, ShipTemplates } from "./interfaces";
 
 import LocationContext from "./LocationContext";
@@ -16,10 +21,13 @@ import "./setup.scss";
 
 const Setup = (props: {
     fleet: ShipInterface[];
+    opponentFleet: ShipInterface[];
     setFleet: React.Dispatch<React.SetStateAction<Fleet>>;
+    setOpponentFleet: React.Dispatch<React.SetStateAction<Fleet>>;
 }) => {
-    const { fleet, setFleet } = props;
+    const { fleet, setFleet, opponentFleet, setOpponentFleet } = props;
     const [selectedShip, setSelectedShip] = useState<ShipInterface | null>(null);
+    const [opponentSelectedShip, setOpponentSelectedShip] = useState<ShipInterface | null>(null);
     const [currentAxis, setCurrentAxis] = useState<"X" | "Y" | undefined>("X");
     const [highlightedCoordinates, setHighlightedCoordinates] = useState<string[]>([]);
 
@@ -32,16 +40,10 @@ const Setup = (props: {
         setCurrentAxis((prevAxis) => (prevAxis === "X" ? "Y" : "X"));
     }
 
-    function placeShip(selectedShip: ShipInterface, fleet: Fleet, id: string) {
-        if (selectedShip === null) {
-            return;
-        }
-        const shipLocation = getShipLocation(id, selectedShip.health, currentAxis);
-        const fleetLocation = getFleetLocation(fleet);
-        const placementConflict = fleetLocation.some((coordinate) => {
-            return shipLocation.includes(coordinate);
-        });
-        if (placementConflict) {
+    function placeShip(selectedShip: ShipInterface, fleet: Fleet, id: string, currentAxis: Axis) {
+        const validPlacement = checkIsValidPlacement(selectedShip, fleet, id, currentAxis);
+
+        if (validPlacement !== true) {
             return;
         }
 
@@ -58,6 +60,29 @@ const Setup = (props: {
         });
 
         setSelectedShip(null);
+        setOpponentSelectedShip(null);
+    }
+
+    function placeOpponentShip(selectedShip: ShipInterface, fleet: Fleet): "placed" {
+        const id = getRandomCoordinates();
+        const axis = getRandomAxis();
+        const validPlacement = checkIsValidPlacement(selectedShip, fleet, id, axis);
+        if (validPlacement) {
+            setOpponentFleet((prevOpponentFleet: ShipInterface[]): ShipInterface[] => {
+                const updatedFleet: ShipInterface[] = [
+                    ...prevOpponentFleet,
+                    {
+                        ...selectedShip,
+                        isPlaced: true,
+                        location: getShipLocation(id, selectedShip.health, axis),
+                    },
+                ];
+                return updatedFleet;
+            });
+        } else {
+            return placeOpponentShip(selectedShip, fleet);
+        }
+        return "placed";
     }
 
     function selectShip(shipName: ShipNames) {
@@ -73,14 +98,20 @@ const Setup = (props: {
             return;
         }
         setSelectedShip(shipTemplates[ship]);
+        setOpponentSelectedShip(shipTemplates[ship]);
     }
+
+    console.log(fleet);
 
     return (
         <div className="page">
             <LocationContext.Provider
                 value={{
                     placeShip: placeShip,
+                    placeOpponentShip: placeOpponentShip,
+                    opponentFleet,
                     selectedShip: selectedShip,
+                    opponentSelectedShip,
                 }}
             >
                 <Board
@@ -93,6 +124,13 @@ const Setup = (props: {
                 />
             </LocationContext.Provider>
             <div className="ship-container">
+                <button
+                    onClick={() => {
+                        placeOpponentShip(opponentSelectedShip as ShipInterface, opponentFleet);
+                    }}
+                >
+                    PLACE SHIP
+                </button>
                 <ShipSelectButton shipName="Carrier" selectShip={selectShip} />
 
                 <ShipSelectButton shipName="Battleship" selectShip={selectShip} />
