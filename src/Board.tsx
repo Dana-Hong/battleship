@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Coordinate from "./Coordinate";
 
 import {
@@ -17,9 +17,11 @@ export default function Board(props: {
     selectedShip?: ShipInterface;
     highlightedCoordinates?: string[];
     highlightCoordinates?: highlightCoordinates;
-    target?: (id: string) => void;
+    target?: ((id: string, fleet: Fleet) => void) | undefined;
     axis?: "X" | "Y" | undefined;
     fleet: Fleet;
+    coordinates?: CoordinateType[];
+    setCoordinates: React.Dispatch<React.SetStateAction<CoordinateType[]>>;
 }) {
     const {
         setup,
@@ -29,34 +31,39 @@ export default function Board(props: {
         target,
         axis,
         fleet,
+        coordinates,
+        setCoordinates,
     } = props;
-    const [coordinates, setCoordinates] = useState<CoordinateType[]>(generateCoordinates());
+    // const [coordinates, setCoordinates] = useState<CoordinateType[]>(generateCoordinates());
 
     useEffect(() => {
-        if (setup === false) {
+        if (setup === true && selectedShip === null) {
             return;
-        }
-        setCoordinates((prevCoordinates) => {
-            return prevCoordinates.map((coordinate) => {
-                const highlightedCoordinate = highlightedCoordinates!.includes(coordinate.location);
-                if (
-                    highlightedCoordinate &&
-                    highlightedCoordinates!.length === selectedShip!.health
-                ) {
-                    return { ...coordinate, hovered: "valid" };
-                } else if (
-                    highlightedCoordinate &&
-                    highlightedCoordinates!.length !== selectedShip!.health
-                ) {
-                    return { ...coordinate, hovered: "invalid" };
-                } else {
-                    return { ...coordinate, hovered: null };
-                }
+        } else if (setup === true) {
+            setCoordinates((prevCoordinates) => {
+                return prevCoordinates.map((coordinate) => {
+                    const highlightedCoordinate = highlightedCoordinates!.includes(
+                        coordinate.location
+                    );
+                    if (
+                        highlightedCoordinate &&
+                        highlightedCoordinates!.length === selectedShip!.health
+                    ) {
+                        return { ...coordinate, hovered: "valid" };
+                    } else if (
+                        highlightedCoordinate &&
+                        highlightedCoordinates!.length !== selectedShip!.health
+                    ) {
+                        return { ...coordinate, hovered: "invalid" };
+                    } else {
+                        return { ...coordinate, hovered: null };
+                    }
+                });
             });
-        });
+        }
     }, [highlightedCoordinates]);
 
-    const coordinateElements = coordinates.map((coordinate) => {
+    const coordinateElements = coordinates!.map((coordinate) => {
         if (setup) {
             return (
                 <Coordinate
@@ -93,8 +100,6 @@ export default function Board(props: {
                 return ship.location;
             })
             .flat();
-
-        console.log(fleetLocation);
 
         setCoordinates((prevCoordinates) => {
             return prevCoordinates.map((coordinate) => {

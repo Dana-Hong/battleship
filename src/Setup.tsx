@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import Board from "./Board";
 import ShipSelectButton from "./ShipSelectButton";
 
+import { generateCoordinates } from "./generateCoordinates";
+
 import {
     getShipLocation,
     getRandomAxis,
@@ -12,7 +14,7 @@ import {
 } from "./utils";
 
 import { shipTemplates } from "./shipTemplates";
-import { Axis, Fleet, PlaceShip, ShipNames } from "./types";
+import { Axis, CoordinateType, Fleet, PlaceShip, ShipNames } from "./types";
 import { ShipInterface, ShipTemplates } from "./interfaces";
 
 import LocationContext from "./LocationContext";
@@ -30,6 +32,8 @@ const Setup = (props: {
     const [opponentSelectedShip, setOpponentSelectedShip] = useState<ShipInterface | null>(null);
     const [currentAxis, setCurrentAxis] = useState<"X" | "Y" | undefined>("X");
     const [highlightedCoordinates, setHighlightedCoordinates] = useState<string[]>([]);
+    const [setupComplete, setSetupComplete] = useState<boolean | null>(null);
+    const [coordinates, setCoordinates] = useState<CoordinateType[]>(generateCoordinates());
 
     function highlightCoordinates(id: string, shipLength: number, axis: "X" | "Y" | undefined) {
         const hoveredCoordinates = getShipLocation(id, shipLength, axis);
@@ -101,7 +105,11 @@ const Setup = (props: {
         setOpponentSelectedShip(shipTemplates[ship]);
     }
 
-    console.log(fleet);
+    useEffect(() => {
+        if (fleet.length === 5) {
+            setSetupComplete(true);
+        }
+    }, [fleet]);
 
     return (
         <div className="page">
@@ -111,7 +119,6 @@ const Setup = (props: {
                     placeOpponentShip: placeOpponentShip,
                     opponentFleet,
                     selectedShip: selectedShip,
-                    opponentSelectedShip,
                 }}
             >
                 <Board
@@ -121,16 +128,11 @@ const Setup = (props: {
                     highlightCoordinates={highlightCoordinates}
                     axis={currentAxis}
                     fleet={fleet}
+                    coordinates={coordinates}
+                    setCoordinates={setCoordinates}
                 />
             </LocationContext.Provider>
             <div className="ship-container">
-                <button
-                    onClick={() => {
-                        placeOpponentShip(opponentSelectedShip as ShipInterface, opponentFleet);
-                    }}
-                >
-                    PLACE SHIP
-                </button>
                 <ShipSelectButton shipName="Carrier" selectShip={selectShip} />
 
                 <ShipSelectButton shipName="Battleship" selectShip={selectShip} />
@@ -144,9 +146,16 @@ const Setup = (props: {
             <button onClick={switchAxis}>{`Switch to ${
                 currentAxis === "Y" ? "X" : "Y"
             } axis`}</button>
-            <Link to="/playgame">
-                <button>Play</button>
-            </Link>
+            {setupComplete && (
+                <div className="button">
+                    <Link
+                        to="/playgame"
+                        style={{ display: "inline-block", height: "100%", width: "100%" }}
+                    >
+                        Play
+                    </Link>
+                </div>
+            )}
         </div>
     );
 };

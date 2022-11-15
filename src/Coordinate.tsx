@@ -14,8 +14,8 @@ export default function Coordinate(props: {
     highlightCoordinates?: highlightCoordinates;
     selectedShip?: ShipInterface;
     axis?: "X" | "Y" | undefined;
-    target?: (id: string) => void;
-    fleet: ShipInterface[];
+    target?: (id: string, fleet: Fleet) => void;
+    fleet: Fleet;
 }) {
     const {
         setup,
@@ -48,7 +48,8 @@ export default function Coordinate(props: {
                     placeShip(selectedShip as ShipInterface, fleet, location, axis);
                     placeOpponentShip(selectedShip as ShipInterface, opponentFleet as Fleet);
                 } else {
-                    target!((event.target as HTMLDivElement).id);
+                    target!((event.target as HTMLDivElement).id, fleet);
+                    // console.log((event.target as HTMLDivElement).id);
                 }
             }}
             onMouseOver={(event) => {
@@ -60,6 +61,8 @@ export default function Coordinate(props: {
                     );
                 }
             }}
-        ></div>
+        >
+            {targeted && "X"}
+        </div>
     );
 }

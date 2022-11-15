@@ -35,6 +35,13 @@ it("returns either X or Y", () => {
     expect(["X", "Y"]).toContain(randomAxis);
 });
 
+// getRandomCoordinates()
+it("returns random valid coordinates", () => {
+    const coordinate = utils.getRandomCoordinates();
+    const regEx = expect.stringMatching(/[A-Z]([1-9]|10)$/);
+    expect(coordinate).toEqual(regEx);
+});
+
 // getShipLocation()
 it("returns the coordinates of the ship using the selected coordinate and current axis as arguments", () => {
     const shipLocation = utils.getShipLocation("A10", 4, "X");

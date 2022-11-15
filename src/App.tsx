@@ -19,8 +19,7 @@ function App() {
     const [opponentFleet, setOpponentFleet] = useState<Fleet>([]);
     const [coordinates, setCoordinates] = useState<CoordinateType[]>(generateCoordinates());
 
-    console.log(fleet);
-    console.log(opponentFleet);
+    console.log("myfleet:", fleet, "\n", "opponentfleet:", opponentFleet);
 
     return (
         <main>
