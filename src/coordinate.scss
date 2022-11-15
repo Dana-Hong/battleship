@@ -22,3 +22,27 @@
 .invalid {
     background-color: red;
 }
+
+.targeted {
+    // color: red;
+    display: block;
+}
+
+@mixin cross-styles {
+    content: "";
+    position: absolute;
+    border-radius: 3px;
+    background-color: red;
+    height: 3px;
+    width: 45px;
+}
+
+.targeted::before {
+    @include cross-styles;
+    transform: translateX(-23px) translateY(11px) rotate(45deg);
+}
+
+.targeted::after {
+    @include cross-styles;
+    transform: translateX(-23px) translateY(11px) rotate(135deg);
+}

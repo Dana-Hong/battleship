@@ -62,7 +62,7 @@ export default function Coordinate(props: {
                 }
             }}
         >
-            {targeted && "X"}
+            {targeted && <span className="targeted"></span>}
         </div>
     );
 }

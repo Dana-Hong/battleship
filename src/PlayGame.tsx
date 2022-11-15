@@ -7,7 +7,8 @@ import Board from "./Board";
 
 import { CoordinateType, Fleet } from "./types";
 import { ShipInterface } from "./interfaces";
-import { shipTemplates } from "./shipTemplates";
+
+import "./playgame.scss";
 
 export default function PlayGame(props: {
     fleet: Fleet;
@@ -115,21 +116,22 @@ export default function PlayGame(props: {
     }, [opponentFleet]);
 
     return (
-        <div>
-            myboard
-            <Board
-                setup={false}
-                fleet={fleet}
-                coordinates={coordinates}
-                setCoordinates={setCoordinates}
-            />
-            <Board
-                setup={false}
-                fleet={opponentFleet}
-                target={target}
-                coordinates={opponentCoordinates}
-                setCoordinates={setOpponentCoordinates}
-            />
+        <div className="play-game">
+            <div className="game-area">
+                <Board
+                    setup={false}
+                    fleet={fleet}
+                    coordinates={coordinates}
+                    setCoordinates={setCoordinates}
+                />
+                <Board
+                    setup={false}
+                    fleet={opponentFleet}
+                    target={target}
+                    coordinates={opponentCoordinates}
+                    setCoordinates={setOpponentCoordinates}
+                />
+            </div>
         </div>
     );
 }
