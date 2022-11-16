@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { generateCoordinates } from "./generateCoordinates";
-import { getRandomCoordinates } from "./utils";
+import { getFleetLocation, getRandomCoordinates } from "./utils";
 
 import Board from "./Board";
 
@@ -9,127 +9,148 @@ import { CoordinateType, Fleet } from "./types";
 import { ShipInterface } from "./interfaces";
 
 import "./playgame.scss";
+import { e } from "vitest/dist/index-2f5b6168";
 
 export default function PlayGame(props: {
     fleet: Fleet;
     opponentFleet: ShipInterface[];
     setFleet: React.Dispatch<React.SetStateAction<Fleet>>;
     setOpponentFleet: React.Dispatch<React.SetStateAction<Fleet>>;
+    setupComplete: boolean | null;
 }) {
-    const { fleet, opponentFleet, setFleet, setOpponentFleet } = props;
-
+    const { fleet, opponentFleet, setFleet, setOpponentFleet, setupComplete } = props;
     const [coordinates, setCoordinates] = useState<CoordinateType[]>(generateCoordinates());
     const [opponentCoordinates, setOpponentCoordinates] = useState<CoordinateType[]>(
         generateCoordinates()
     );
+    const [winner, setWinner] = useState<string | null>(null);
+    const [opponentTurn, setOpponentTurn] = useState<boolean>(false);
+    const [targetHistory, setTargetHistory] = useState<string[]>([]);
 
-    function target(id: string, fleet: Fleet) {
-        const isOpponentFleet = fleet[0].location[0] === opponentFleet[0].location[0];
-        if (isOpponentFleet) {
-            const alreadyTargeted = opponentCoordinates.some((coordinate) => {
-                if (coordinate.location === id && coordinate.targeted) {
-                    return true;
-                }
-            });
-            if (alreadyTargeted) return;
+    function targetRandomCoordinates() {
+        const target = getRandomCoordinates();
+        const coordinatesAlreadyTargeted = coordinates.some((coordinate) => {
+            if (coordinate.location === target && coordinate.targeted) {
+                return true;
+            }
+        });
+        if (coordinatesAlreadyTargeted) {
+            targetRandomCoordinates();
         } else {
-            const alreadyTargeted = coordinates.some((coordinate) => {
-                return coordinate.location === id ? true : false;
+            setCoordinates((prevCoordinates) => {
+                return prevCoordinates.map((coordinate) => {
+                    return coordinate.location === target
+                        ? { ...coordinate, targeted: true }
+                        : coordinate;
+                });
             });
-            if (alreadyTargeted) {
-                target(getRandomCoordinates(), opponentFleet);
-            }
-        }
-        function setAsTargeted() {
-            if (isOpponentFleet) {
-                setOpponentCoordinates((prevCoordinates) => {
-                    return prevCoordinates.map((coordinate) => {
-                        if (coordinate.location === id) {
-                            return {
-                                ...coordinate,
-                                targeted: true,
-                            };
-                        } else {
-                            return coordinate;
-                        }
-                    });
+            setFleet((prevFleet) => {
+                return prevFleet.map((ship) => {
+                    if (ship.location.includes(target) && ship.health === 1) {
+                        return {
+                            ...ship,
+                            health: ship.health - 1,
+                            active: false,
+                        };
+                    } else if (ship.location.includes(target) && ship.health > 1) {
+                        return {
+                            ...ship,
+                            health: ship.health - 1,
+                        };
+                    } else {
+                        return ship;
+                    }
                 });
-            } else {
-                setCoordinates((prevCoordinates) => {
-                    return prevCoordinates.map((coordinate) => {
-                        if (coordinate.location === id) {
-                            return {
-                                ...coordinate,
-                                targeted: true,
-                            };
-                        } else {
-                            return coordinate;
-                        }
-                    });
-                });
-            }
+            });
+            setOpponentTurn(false);
+            return target;
         }
+    }
 
-        if (fleet.some((ship) => ship.location.includes(id))) {
-            if (isOpponentFleet) {
-                console.log("hit!");
-                setOpponentFleet((prevOpponentFleet) => {
-                    return prevOpponentFleet.map((ship) => {
-                        if (ship.location.includes(id)) {
-                            return {
-                                ...ship,
-                                destroyedLocations: [...ship.destroyedLocations, id],
-                                health: ship.health - 1,
-                            };
-                        } else {
-                            return ship;
-                        }
-                    });
+    function target(id: string) {
+        const coordinatesAlreadyTargeted = targetHistory.includes(id);
+        if (coordinatesAlreadyTargeted) {
+            return;
+        } else {
+            setOpponentCoordinates((prevCoordinates) => {
+                return prevCoordinates.map((coordinate) => {
+                    if (coordinate.location === id) {
+                        return {
+                            ...coordinate,
+                            targeted: true,
+                        };
+                    } else {
+                        return coordinate;
+                    }
                 });
-            } else {
-                setFleet((prevFleet: ShipInterface[]): ShipInterface[] => {
-                    return prevFleet.map((ship) => {
-                        if (ship.location.includes(id)) {
-                            return {
-                                ...ship,
-                                destroyedLocations: [...ship.destroyedLocations, id],
-                                health: ship.health - 1,
-                            };
-                        } else {
-                            return ship;
-                        }
-                    });
+            });
+            setTargetHistory((prevTargetHistory) => {
+                return [...prevTargetHistory, id];
+            });
+            setOpponentFleet((prevFleet) => {
+                return prevFleet.map((ship) => {
+                    if (ship.location.includes(id) && ship.health === 1) {
+                        return {
+                            ...ship,
+                            health: ship.health - 1,
+                            active: false,
+                        };
+                    } else if (ship.location.includes(id) && ship.health > 1) {
+                        return {
+                            ...ship,
+                            health: ship.health - 1,
+                        };
+                    } else {
+                        return ship;
+                    }
                 });
-            }
+            });
+            setOpponentTurn(true);
         }
-        setAsTargeted();
     }
 
     useEffect(() => {
-        const destroyedShips = fleet.filter((ship) => ship.health === 0);
-        destroyedShips.length === 5 ? console.log("Computer wins") : "";
+        if (!setupComplete) {
+            return;
+        }
+        const fleetDestroyed = fleet.every((ship) => (ship.active ? false : true));
+        if (fleetDestroyed) {
+            setWinner("Computer");
+        }
     }, [fleet]);
 
     useEffect(() => {
-        const destroyedShips = opponentFleet.filter((ship) => ship.health === 0);
-        destroyedShips.length === 5 ? console.log("player wins") : "";
-    }, [opponentFleet]);
+        if (!setupComplete) {
+            return;
+        }
+        const fleetDestroyed = opponentFleet.every((ship) => (!ship.active ? true : false));
+        if (fleetDestroyed) {
+            setWinner("Player");
+        } else if (opponentTurn) {
+            targetRandomCoordinates();
+        }
+    }, [opponentCoordinates]);
 
     return (
         <div className="play-game">
+            {winner && <p>{`${winner} wins!`}</p>}
             <div className="game-area">
                 <Board
                     setup={false}
                     fleet={fleet}
                     coordinates={coordinates}
                     setCoordinates={setCoordinates}
+                    isPlayerBoard={true}
+                    target={target}
                 />
                 <Board
                     setup={false}
                     fleet={opponentFleet}
-                    target={target}
                     coordinates={opponentCoordinates}
                     setCoordinates={setOpponentCoordinates}
+                    isPlayerBoard={false}
+                    target={target}
+                    winner={winner}
                 />
             </div>
         </div>

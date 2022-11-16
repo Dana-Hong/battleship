@@ -17,11 +17,13 @@ export default function Board(props: {
     selectedShip?: ShipInterface;
     highlightedCoordinates?: string[];
     highlightCoordinates?: highlightCoordinates;
-    target?: ((id: string, fleet: Fleet) => void) | undefined;
+    target?: ((id: string) => void) | undefined;
     axis?: "X" | "Y" | undefined;
     fleet: Fleet;
     coordinates?: CoordinateType[];
     setCoordinates: React.Dispatch<React.SetStateAction<CoordinateType[]>>;
+    isPlayerBoard?: boolean;
+    winner?: string | null;
 }) {
     const {
         setup,
@@ -33,8 +35,9 @@ export default function Board(props: {
         fleet,
         coordinates,
         setCoordinates,
+        isPlayerBoard,
+        winner,
     } = props;
-    // const [coordinates, setCoordinates] = useState<CoordinateType[]>(generateCoordinates());
 
     useEffect(() => {
         if (setup === true && selectedShip === null) {
@@ -66,7 +69,7 @@ export default function Board(props: {
     const coordinateElements = coordinates!.map((coordinate) => {
         if (setup) {
             return (
-                <Coordinate
+                <Coordinate // SETUP COORDINATES
                     key={coordinate.location}
                     setup={true}
                     location={coordinate.location}
@@ -77,11 +80,12 @@ export default function Board(props: {
                     selectedShip={selectedShip}
                     axis={axis}
                     fleet={fleet}
+                    isPlayerBoard={isPlayerBoard}
                 />
             );
-        } else {
+        } else if (isPlayerBoard) {
             return (
-                <Coordinate
+                <Coordinate // PLAYER COORDINATES
                     key={coordinate.location}
                     setup={false}
                     location={coordinate.location}
@@ -89,6 +93,21 @@ export default function Board(props: {
                     target={target}
                     occupied={coordinate.occupied}
                     fleet={fleet}
+                    isPlayerBoard={isPlayerBoard}
+                />
+            );
+        } else {
+            return (
+                <Coordinate // OPPONENT COORDINATES
+                    key={coordinate.location}
+                    setup={false}
+                    location={coordinate.location}
+                    targeted={coordinate.targeted}
+                    target={target}
+                    occupied={coordinate.occupied}
+                    fleet={fleet}
+                    isPlayerBoard={isPlayerBoard}
+                    winner={winner}
                 />
             );
         }

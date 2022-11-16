@@ -18,8 +18,7 @@ function App() {
     const [fleet, setFleet] = useState<Fleet>([]);
     const [opponentFleet, setOpponentFleet] = useState<Fleet>([]);
     const [coordinates, setCoordinates] = useState<CoordinateType[]>(generateCoordinates());
-
-    console.log("myfleet:", fleet, "\n", "opponentfleet:", opponentFleet);
+    const [setupComplete, setSetupComplete] = useState<boolean | null>(null);
 
     return (
         <main>
@@ -33,6 +32,8 @@ function App() {
                             setFleet={setFleet}
                             opponentFleet={opponentFleet}
                             setOpponentFleet={setOpponentFleet}
+                            setupComplete={setupComplete}
+                            setSetupComplete={setSetupComplete}
                         />
                     }
                 />
@@ -44,6 +45,7 @@ function App() {
                             setFleet={setFleet}
                             opponentFleet={opponentFleet}
                             setOpponentFleet={setOpponentFleet}
+                            setupComplete={setupComplete}
                         />
                     }
                 />

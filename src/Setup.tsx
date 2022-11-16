@@ -26,13 +26,15 @@ const Setup = (props: {
     opponentFleet: ShipInterface[];
     setFleet: React.Dispatch<React.SetStateAction<Fleet>>;
     setOpponentFleet: React.Dispatch<React.SetStateAction<Fleet>>;
+    setupComplete: boolean | null;
+    setSetupComplete: React.Dispatch<React.SetStateAction<boolean | null>>;
 }) => {
-    const { fleet, setFleet, opponentFleet, setOpponentFleet } = props;
+    const { fleet, setFleet, opponentFleet, setOpponentFleet, setupComplete, setSetupComplete } =
+        props;
     const [selectedShip, setSelectedShip] = useState<ShipInterface | null>(null);
     const [opponentSelectedShip, setOpponentSelectedShip] = useState<ShipInterface | null>(null);
     const [currentAxis, setCurrentAxis] = useState<"X" | "Y" | undefined>("X");
     const [highlightedCoordinates, setHighlightedCoordinates] = useState<string[]>([]);
-    const [setupComplete, setSetupComplete] = useState<boolean | null>(null);
     const [coordinates, setCoordinates] = useState<CoordinateType[]>(generateCoordinates());
 
     function highlightCoordinates(id: string, shipLength: number, axis: "X" | "Y" | undefined) {
@@ -134,20 +136,16 @@ const Setup = (props: {
             </LocationContext.Provider>
             <div className="ship-container">
                 <ShipSelectButton shipName="Carrier" selectShip={selectShip} />
-
                 <ShipSelectButton shipName="Battleship" selectShip={selectShip} />
-
                 <ShipSelectButton shipName="Cruiser" selectShip={selectShip} />
-
                 <ShipSelectButton shipName="Submarine" selectShip={selectShip} />
-
                 <ShipSelectButton shipName="Destroyer" selectShip={selectShip} />
             </div>
             <button onClick={switchAxis}>{`Switch to ${
                 currentAxis === "Y" ? "X" : "Y"
             } axis`}</button>
             {setupComplete && (
-                <div className="button">
+                <div className="button" onClick={() => console.log("game has begun")}>
                     <Link
                         to="/playgame"
                         style={{ display: "inline-block", height: "100%", width: "100%" }}

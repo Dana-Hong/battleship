@@ -14,8 +14,10 @@ export default function Coordinate(props: {
     highlightCoordinates?: highlightCoordinates;
     selectedShip?: ShipInterface;
     axis?: "X" | "Y" | undefined;
-    target?: (id: string, fleet: Fleet) => void;
+    target?: (id: string) => void;
     fleet: Fleet;
+    isPlayerBoard: boolean | undefined;
+    winner?: string | null;
 }) {
     const {
         setup,
@@ -28,6 +30,8 @@ export default function Coordinate(props: {
         axis,
         target,
         fleet,
+        isPlayerBoard,
+        winner,
     } = props;
     const { placeShip, placeOpponentShip, opponentFleet } = useContext(LocationContext);
 
@@ -47,9 +51,10 @@ export default function Coordinate(props: {
                 if (setup) {
                     placeShip(selectedShip as ShipInterface, fleet, location, axis);
                     placeOpponentShip(selectedShip as ShipInterface, opponentFleet as Fleet);
-                } else {
-                    target!((event.target as HTMLDivElement).id, fleet);
-                    // console.log((event.target as HTMLDivElement).id);
+                    return;
+                } else if (!isPlayerBoard && !winner) {
+                    target!((event.target as HTMLDivElement).id);
+                    return;
                 }
             }}
             onMouseOver={(event) => {
