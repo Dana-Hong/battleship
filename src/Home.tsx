@@ -1,10 +1,11 @@
 import { Link } from "react-router-dom";
+import "./home.scss";
 
-export default function Home(props) {
+export default function Home() {
     return (
         <div className="main-menu">
-            <h1>Battleship</h1>
-            <div>
+            <h1 className="title">Battleship</h1>
+            <div className="menu-buttons">
                 <button>
                     <Link to="/setup">Start Game</Link>
                 </button>

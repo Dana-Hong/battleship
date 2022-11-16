@@ -1,22 +1,21 @@
 .coordinate {
-    border: solid white 1px;
-    width: 25px;
-    height: 25px;
+    border: solid aliceblue 1px;
     text-align: center;
     padding: 0.25em;
     cursor: pointer;
+    background-color: rgb(28, 114, 184);
 }
 
 .valid {
-    background-color: grey;
+    background-color: rgb(7, 63, 46);
 }
 
 .coordinate:hover {
-    background-color: aliceblue;
+    background-color: rgb(7, 63, 46);
 }
 
 .occupied {
-    background-color: rgb(53, 105, 126);
+    background-color: rgb(97, 97, 97);
 }
 
 .invalid {
@@ -24,7 +23,6 @@
 }
 
 .targeted {
-    // color: red;
     display: block;
 }
 

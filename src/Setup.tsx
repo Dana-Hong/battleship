@@ -115,45 +115,52 @@ const Setup = (props: {
 
     return (
         <div className="page">
-            <LocationContext.Provider
-                value={{
-                    placeShip: placeShip,
-                    placeOpponentShip: placeOpponentShip,
-                    opponentFleet,
-                    selectedShip: selectedShip,
-                }}
-            >
-                <Board
-                    setup={true}
-                    selectedShip={selectedShip!}
-                    highlightedCoordinates={highlightedCoordinates}
-                    highlightCoordinates={highlightCoordinates}
-                    axis={currentAxis}
-                    fleet={fleet}
-                    coordinates={coordinates}
-                    setCoordinates={setCoordinates}
-                />
-            </LocationContext.Provider>
-            <div className="ship-container">
-                <ShipSelectButton shipName="Carrier" selectShip={selectShip} />
-                <ShipSelectButton shipName="Battleship" selectShip={selectShip} />
-                <ShipSelectButton shipName="Cruiser" selectShip={selectShip} />
-                <ShipSelectButton shipName="Submarine" selectShip={selectShip} />
-                <ShipSelectButton shipName="Destroyer" selectShip={selectShip} />
-            </div>
-            <button onClick={switchAxis}>{`Switch to ${
-                currentAxis === "Y" ? "X" : "Y"
-            } axis`}</button>
-            {setupComplete && (
-                <div className="button" onClick={() => console.log("game has begun")}>
-                    <Link
-                        to="/playgame"
-                        style={{ display: "inline-block", height: "100%", width: "100%" }}
-                    >
-                        Play
-                    </Link>
+            <h1 className="title">Position your Fleet</h1>
+            <div className="setup">
+                <LocationContext.Provider
+                    value={{
+                        placeShip: placeShip,
+                        placeOpponentShip: placeOpponentShip,
+                        opponentFleet,
+                        selectedShip: selectedShip,
+                    }}
+                >
+                    <Board
+                        setup={true}
+                        selectedShip={selectedShip!}
+                        highlightedCoordinates={highlightedCoordinates}
+                        highlightCoordinates={highlightCoordinates}
+                        axis={currentAxis}
+                        fleet={fleet}
+                        coordinates={coordinates}
+                        setCoordinates={setCoordinates}
+                    />
+                </LocationContext.Provider>
+                <div className="ship-container">
+                    <button onClick={switchAxis}>{"Switch axis"}</button>
+                    <ShipSelectButton shipName="Carrier" selectShip={selectShip} />
+                    <ShipSelectButton shipName="Battleship" selectShip={selectShip} />
+                    <ShipSelectButton shipName="Cruiser" selectShip={selectShip} />
+                    <ShipSelectButton shipName="Submarine" selectShip={selectShip} />
+                    <ShipSelectButton shipName="Destroyer" selectShip={selectShip} />
                 </div>
-            )}
+            </div>
+            <div
+                className={`button play-game-button ${setupComplete ? "visible" : "invisible"}`}
+                onClick={() => console.log("game has begun")}
+            >
+                <Link
+                    to="/playgame"
+                    style={{
+                        display: "inline-block",
+                        height: "100%",
+                        width: "100%",
+                        textAlign: "center",
+                    }}
+                >
+                    Play
+                </Link>
+            </div>
         </div>
     );
 };

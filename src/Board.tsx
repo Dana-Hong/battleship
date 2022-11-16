@@ -132,14 +132,15 @@ export default function Board(props: {
     }, [fleet]);
 
     const longitudeElements = longitudeCoordinates.map((coordinate) => (
-        <p className="label" key={coordinate}>
+        <div className="label" key={coordinate}>
             {coordinate}
-        </p>
+        </div>
     ));
     const latitudeElements = latitudeCoordinates.map((coordinate) => (
-        <p className="label" key={coordinate}>
+        <div className="label" key={coordinate}>
+            {/* <div className="content">{coordinate}</div> */}
             {coordinate}
-        </p>
+        </div>
     ));
     return (
         <div className="board-container">

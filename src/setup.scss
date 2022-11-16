@@ -1,13 +1,50 @@
 .page {
-    border: solid red 2px;
+    height: 100vh;
     max-width: 1536px;
-    margin: 0 auto;
-}
-
-.ship-container {
+    min-width: 396px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    justify-content: center;
+}
+
+.title {
+    text-align: center;
+}
+
+.ship-container {
+    margin: 1em auto 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-items: center;
+    gap: 1em;
     max-width: 385px;
+    height: 150px;
+}
+
+.setup {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 1024px;
+    margin: 0 auto;
+}
+
+.invisible {
+    visibility: hidden;
+}
+
+.visible {
+    visibility: visible;
+}
+
+.play-game-button {
+    margin: 5em auto 0;
+}
+
+@media (min-width: 1024px) {
+    .setup {
+        width: 1024px;
+        flex-direction: row;
+    }
 }
