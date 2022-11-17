@@ -133,25 +133,31 @@ export default function PlayGame(props: {
 
     return (
         <div className="play-game">
-            {winner && <p>{`${winner} wins!`}</p>}
+            {<h1 className={`title ${winner ? "unhide" : ""}`}>{`${winner} wins!`}</h1>}
             <div className="game-area">
-                <Board
-                    setup={false}
-                    fleet={fleet}
-                    coordinates={coordinates}
-                    setCoordinates={setCoordinates}
-                    isPlayerBoard={true}
-                    target={target}
-                />
-                <Board
-                    setup={false}
-                    fleet={opponentFleet}
-                    coordinates={opponentCoordinates}
-                    setCoordinates={setOpponentCoordinates}
-                    isPlayerBoard={false}
-                    target={target}
-                    winner={winner}
-                />
+                <div className="">
+                    <h2 className="fleet-label">Your Fleet</h2>
+                    <Board
+                        setup={false}
+                        fleet={fleet}
+                        coordinates={coordinates}
+                        setCoordinates={setCoordinates}
+                        isPlayerBoard={true}
+                        target={target}
+                    />
+                </div>
+                <div className="">
+                    <h2 className="fleet-label">Enemy Fleet</h2>
+                    <Board
+                        setup={false}
+                        fleet={opponentFleet}
+                        coordinates={opponentCoordinates}
+                        setCoordinates={setOpponentCoordinates}
+                        isPlayerBoard={false}
+                        target={target}
+                        winner={winner}
+                    />
+                </div>
             </div>
         </div>
     );

@@ -1,5 +1,4 @@
 .main-menu {
-    border: solid green 2px;
     max-width: 1024px;
     margin: 0 auto;
     height: 100%;
@@ -15,7 +14,6 @@
 .menu-buttons {
     display: flex;
     flex-direction: column;
-    border: solid red 2px;
     max-width: 30em;
     align-items: center;
     margin: 0 auto;

@@ -1,6 +1,36 @@
+.play-game {
+    min-height: 100vh;
+    max-width: 1536px;
+    min-width: 396px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.fleet-label {
+    text-align: center;
+}
+
+.title {
+    visibility: hidden;
+    margin-bottom: 5em;
+}
+
+.unhide {
+    visibility: visible;
+}
+
 .game-area {
     display: flex;
     flex-direction: column;
     margin: 0 auto;
-    border: solid red 2px;
+}
+
+@media (min-width: 1140px) {
+    .game-area {
+        width: 75%;
+        flex-direction: row;
+        gap: 5em;
+        justify-content: space-between;
+    }
 }

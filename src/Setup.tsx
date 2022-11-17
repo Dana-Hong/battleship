@@ -134,6 +134,7 @@ const Setup = (props: {
                         fleet={fleet}
                         coordinates={coordinates}
                         setCoordinates={setCoordinates}
+                        isPlayerBoard={true}
                     />
                 </LocationContext.Provider>
                 <div className="ship-container">
