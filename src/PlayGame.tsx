@@ -133,7 +133,7 @@ export default function PlayGame(props: {
 
     return (
         <div className="play-game">
-            {<h1 className={`title ${winner ? "unhide" : ""}`}>{`${winner} wins!`}</h1>}
+            {<h1 className={`playgame-title ${winner ? "unhide" : ""}`}>{`${winner} wins!`}</h1>}
             <div className="game-area">
                 <div className="">
                     <h2 className="fleet-label">Your Fleet</h2>
