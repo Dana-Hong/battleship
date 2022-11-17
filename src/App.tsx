@@ -4,8 +4,8 @@ import { Route, Routes } from "react-router-dom";
 import Home from "./Home";
 import Setup from "./Setup";
 import PlayGame from "./PlayGame";
-import HowToPlay from "./HowToPlay";
-import History from "./History";
+// import HowToPlay from "./HowToPlay";
+// import History from "./History";
 
 import { generateCoordinates } from "./generateCoordinates";
 
@@ -49,8 +49,8 @@ function App() {
                         />
                     }
                 />
-                <Route path="/how-to-play" element={<HowToPlay />} />
-                <Route path="/history" element={<History />} />
+                {/* <Route path="/how-to-play" element={<HowToPlay />} /> */}
+                {/* <Route path="/history" element={<History />} /> */}
             </Routes>
         </main>
     );
