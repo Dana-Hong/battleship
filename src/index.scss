@@ -1,5 +1,10 @@
+@font-face {
+    font-family: D-day-stencil;
+    src: url("./assets/d-day-stencil/D\ Day\ Stencil.ttf") format("truetype");
+}
+
 :root {
-    font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+    font-family: D-day-stencil, Inter, Avenir, Helvetica, Arial, sans-serif;
     font-size: 16px;
     line-height: 24px;
     font-weight: 400;
@@ -22,7 +27,7 @@ html {
 
 a {
     font-weight: 500;
-    color: #646cff;
+    color: #1295ec;
     text-decoration: inherit;
 }
 a:hover {
@@ -46,14 +51,15 @@ h1 {
 button {
     border-radius: 8px;
     border: 1px solid transparent;
-    padding: 0.6em 1.2em;
-    font-size: 1em;
+    // padding: 1em 0.25em;
+    font-size: 1.7em;
+    letter-spacing: 3px;
     font-weight: 500;
     font-family: inherit;
     background-color: #1a1a1a;
     cursor: pointer;
     transition: border-color 0.25s;
-    width: 9em;
+    // width: 9em;
 }
 
 button {
@@ -70,7 +76,7 @@ button:focus-visible {
 
 .button {
     @extend button;
-    max-width: 5em;
+    // max-width: 3em;
 }
 
 // @media (prefers-color-scheme: light) {

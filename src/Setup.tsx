@@ -137,7 +137,7 @@ const Setup = (props: {
                         isPlayerBoard={true}
                     />
                 </LocationContext.Provider>
-                <div className="ship-container">
+                <div className="ship-selection-container">
                     <button onClick={switchAxis}>{"Switch axis"}</button>
                     <ShipSelectButton shipName="Carrier" selectShip={selectShip} />
                     <ShipSelectButton shipName="Battleship" selectShip={selectShip} />
@@ -154,9 +154,10 @@ const Setup = (props: {
                     to="/playgame"
                     style={{
                         display: "inline-block",
-                        height: "100%",
-                        width: "100%",
+                        // height: "100%",
+                        // width: "100%",
                         textAlign: "center",
+                        padding: ".5em 1em",
                     }}
                 >
                     Play

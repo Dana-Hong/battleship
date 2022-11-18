@@ -45,8 +45,10 @@ export default function Coordinate(props: {
 
     return (
         <div
-            className={`coordinate ${shipHere ? "occupied" : ""} ${hovered ? hovered : ""} ${
-                isPlayerBoard || setup === false ? "" : "enemyboard"
+            className={`coordinate ${shipHere && isPlayerBoard ? "occupied" : ""} ${
+                hovered ? hovered : ""
+            } ${isPlayerBoard || setup === false ? "" : "enemyboard"} ${
+                occupied && targeted ? "destroyed" : ""
             }`}
             id={location}
             onClick={(event) => {

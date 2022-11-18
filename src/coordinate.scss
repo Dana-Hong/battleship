@@ -3,7 +3,6 @@
     text-align: center;
     padding: 0.25em;
     cursor: pointer;
-    background-color: rgb(28, 114, 184);
 }
 
 .valid {
@@ -26,11 +25,15 @@
     display: block;
 }
 
+.destroyed {
+    background-color: rgb(231, 31, 31);
+}
+
 @mixin cross-styles {
     content: "";
     position: absolute;
     border-radius: 3px;
-    background-color: red;
+    background-color: rgb(206, 206, 206);
     height: 3px;
     width: 45px;
 }

@@ -1,5 +1,4 @@
 .board-container {
-    margin: 0 auto;
     max-width: 386px;
     display: grid;
     grid-template-columns: 36px 1fr 36px;
@@ -26,8 +25,18 @@
 }
 
 .board {
+    background-image: url("../public/sea.jpg");
+    background-color: rgb(27, 129, 155);
+    background-size: cover;
+    background-blend-mode: multiply;
     grid-column-start: 2;
     grid-row-start: 2;
     display: grid;
     grid-template-columns: repeat(10, 1fr);
+}
+
+@media (min-width: 400px) {
+    .board-container {
+        max-width: 486;
+    }
 }
